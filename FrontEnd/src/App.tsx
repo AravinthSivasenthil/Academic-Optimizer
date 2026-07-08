@@ -1,25 +1,45 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { BrowserRouter, Routes, Route, Link, NavLink } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import Courses from "./pages/Courses";
 
 function App() {
-  const [status, setStatus] = useState("checking...");
-
-  useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_API_URL}/api/health`)
-      .then((res) => setStatus(JSON.stringify(res.data)))
-      .catch((err) => setStatus("error: " + err.message));
-  }, []);
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50">
-      <div className="p-8 bg-white rounded-xl shadow">
-        <h1 className="text-2xl font-bold text-slate-800">
-          Academic Optimizer
-        </h1>
-        <p className="text-slate-600 mt-2">Backend status: {status}</p>
+    <BrowserRouter>
+      <div className="min-h-screen bg-slate-50">
+        <header className="bg-white border-b">
+          <div className="max-w-5xl mx-auto px-6 py-4 flex items-center gap-6">
+            <Link to="/" className="font-bold text-slate-800">
+              Academic Optimizer
+            </Link>
+            <nav className="flex gap-4 text-sm">
+              <NavLink
+                to="/"
+                end
+                className={({ isActive }) =>
+                  isActive ? "text-slate-900 font-semibold" : "text-slate-500"
+                }
+              >
+                Dashboard
+              </NavLink>
+              <NavLink
+                to="/courses"
+                className={({ isActive }) =>
+                  isActive ? "text-slate-900 font-semibold" : "text-slate-500"
+                }
+              >
+                Courses
+              </NavLink>
+            </nav>
+          </div>
+        </header>
+        <main className="max-w-5xl mx-auto px-6 py-8">
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/courses" element={<Courses />} />
+          </Routes>
+        </main>
       </div>
-    </div>
+    </BrowserRouter>
   );
 }
 
