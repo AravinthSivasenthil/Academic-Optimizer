@@ -46,6 +46,14 @@ async def update_course(course_id: str, payload: CourseIn):
     doc = await db.courses.find_one({"_id": ObjectId(course_id)})
     return to_out(doc)
 
+@router.get("/{course_id}")
+async def get_course(course_id: str):
+    from bson import ObjectId
+    doc = await db.courses.find_one({"_id": ObjectId(course_id)})
+    if not doc:
+        raise HTTPException(404, "Course not found")
+    return to_out(doc)
+
 @router.delete("/{course_id}")
 async def delete_course(course_id: str):
     result = await db.courses.delete_one({"_id": ObjectId(course_id)})
