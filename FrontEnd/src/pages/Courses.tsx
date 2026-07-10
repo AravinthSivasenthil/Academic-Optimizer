@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../lib/api";
+import { Link } from "react-router-dom";
 
 type Course = {
   id: string;
@@ -157,7 +158,7 @@ export default function Courses() {
             key={c.id}
             className="p-4 flex items-center justify-between hover:bg-slate-50"
           >
-            <div>
+            <Link to={`/courses/${c.id}`} className="flex-1">
               <div className="font-semibold text-slate-800">
                 {c.code ? `${c.code} — ` : ""}{c.name}
               </div>
@@ -165,7 +166,7 @@ export default function Courses() {
                 {c.semester} · {c.credits} credits · {c.category}
                 {c.instructor ? ` · ${c.instructor}` : ""}
               </div>
-            </div>
+            </Link>
             <div className="flex gap-2">
               <button
                 onClick={() => edit(c)}
