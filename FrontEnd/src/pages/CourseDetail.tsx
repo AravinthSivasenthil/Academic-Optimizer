@@ -45,6 +45,9 @@ export default function CourseDetail() {
   const [form, setForm] = useState<any>(emptyForm);
   const [editingId, setEditingId] = useState<string | null>(null);
 
+  const [target, setTarget] = useState(85);
+  const [whatIf, setWhatIf] = useState<any>(null);
+
   const load = async () => {
     if (!id) return;
     const [c, a, s] = await Promise.all([
@@ -60,6 +63,11 @@ export default function CourseDetail() {
   useEffect(() => {
     load();
   }, [id]);
+
+  const runWhatIf = async () => {
+    const r = await api.get(`/api/gpa/whatif/${id}`, { params: { target } });
+    setWhatIf(r.data);
+  };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,8 +94,8 @@ export default function CourseDetail() {
     setForm({
       name: a.name,
       type: a.type,
-      weight: a.weight.toString,
-      max_score: a.max_score.toString,
+      weight: a.weight.toString(),
+      max_score: a.max_score.toString(),
       score: a.score !== null ? a.score.toString() : "",
     });
   };
@@ -149,6 +157,47 @@ export default function CourseDetail() {
           </div>
         </div>
       )}
+
+      <div className="bg-white rounded-xl shadow p-6 mb-6">
+        <h2 className="font-semibold text-slate-800 mb-3">What-If Calculator</h2>
+        <div className="flex items-end gap-3">
+          <div>
+            <label className="text-xs text-slate-500">Target course grade (%)</label>
+            <input
+              type="number"
+              step="0.1"
+              className="border rounded px-3 py-2 block mt-1"
+              value={target}
+              onChange={(e) => setTarget(parseFloat(e.target.value))}
+            />
+          </div>
+          <button
+            onClick={runWhatIf}
+            className="bg-slate-800 text-white px-4 py-2 rounded hover:bg-slate-700"
+          >
+            Calculate
+          </button>
+        </div>
+        {whatIf && (
+          <div className="mt-4 text-sm">
+            {whatIf.required_avg === null ? (
+              <p className="text-slate-600">{whatIf.reason}</p>
+            ) : whatIf.achievable ? (
+              <p className="text-slate-700">
+                You need an average of{" "}
+                <span className="font-bold">{whatIf.required_avg}%</span> across
+                the remaining {whatIf.remaining_weight}% of work to hit{" "}
+                {whatIf.target}%.
+              </p>
+            ) : (
+              <p className="text-red-600">
+                Target not achievable — you'd need {whatIf.required_avg}% on
+                remaining work (must be 0-100).
+              </p>
+            )}
+          </div>
+        )}
+      </div>
 
       <form
         onSubmit={submit}

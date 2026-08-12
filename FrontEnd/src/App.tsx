@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Link, NavLink } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Courses from "./pages/Courses";
 import CourseDetail from "./pages/CourseDetail";
+import GPA from "./pages/GPA";
 
 function App() {
   return (
@@ -30,6 +31,14 @@ function App() {
               >
                 Courses
               </NavLink>
+              <NavLink
+                to="/gpa"
+                className={({ isActive }) =>
+                  isActive ? "text-slate-900 font-semibold" : "text-slate-500"
+                }
+              >
+                  GPA
+              </NavLink>
             </nav>
           </div>
         </header>
@@ -38,6 +47,7 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/courses" element={<Courses />} />
             <Route path="/courses/:id" element={<CourseDetail />} />
+            <Route path="/gpa" element={<GPA />} />
           </Routes>
         </main>
       </div>
