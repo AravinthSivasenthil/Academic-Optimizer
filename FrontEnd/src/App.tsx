@@ -3,6 +3,8 @@ import Dashboard from "./pages/Dashboard";
 import Courses from "./pages/Courses";
 import CourseDetail from "./pages/CourseDetail";
 import GPA from "./pages/GPA";
+import Deadlines from "./pages/Deadlines";
+
 
 function App() {
   return (
@@ -32,6 +34,14 @@ function App() {
                 Courses
               </NavLink>
               <NavLink
+                to="/deadlines"
+                className={({ isActive }) =>
+                  isActive ? "text-slate-900 font-semibold" : "text-slate-500"
+                }
+              >
+                Deadlines
+              </NavLink>
+              <NavLink
                 to="/gpa"
                 className={({ isActive }) =>
                   isActive ? "text-slate-900 font-semibold" : "text-slate-500"
@@ -48,6 +58,7 @@ function App() {
             <Route path="/courses" element={<Courses />} />
             <Route path="/courses/:id" element={<CourseDetail />} />
             <Route path="/gpa" element={<GPA />} />
+            <Route path="/deadlines" element={<Deadlines />} />
           </Routes>
         </main>
       </div>

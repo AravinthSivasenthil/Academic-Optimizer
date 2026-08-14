@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import db
 from app import courses, assessments, gpa
+from app import courses, assessments, gpa, deadlines
 
 app = FastAPI(title="Academic Optimizer API")
 
@@ -16,6 +17,7 @@ app.add_middleware(
 app.include_router(courses.router)
 app.include_router(assessments.router)
 app.include_router(gpa.router)
+app.include_router(deadlines.router)
 
 @app.get("/")
 async def root():
