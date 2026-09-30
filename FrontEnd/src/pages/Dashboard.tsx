@@ -12,6 +12,14 @@ type Deadline = {
 type GpaData = {
   cumulative_gpa: number | null;
   total_credits: number;
+  semesters: {
+    courses: {
+      id: string;
+      code: string | null;
+      name: string;
+      grade_pct: number | null;
+    }[];
+  }[];
 };
 
 export default function Dashboard() {
@@ -71,6 +79,42 @@ export default function Dashboard() {
           ))}
         </div>
       </div>
+
+      {gpa?.semesters && (
+        <div className="bg-white rounded-xl shadow mt-6">
+          <div className="p-5 border-b">
+            <h2 className="font-semibold text-slate-800">
+              At-Risk Courses (&lt; 70%)
+            </h2>
+          </div>
+
+          <div className="divide-y">
+            {gpa.semesters
+              .flatMap((s) => s.courses)
+              .filter((c) => c.grade_pct !== null && c.grade_pct < 70
+              ).length === 0 && (
+              <p className="p-6 text-sm text-slate-500">
+                Nothing at risk. Good work.
+              </p>
+            )}
+
+            {gpa.semesters
+              .flatMap((s) => s.courses)
+              .filter((c) => c.grade_pct !== null && c.grade_pct < 70)
+              .map((c) => (
+                <div key={c.id} className="p-4 flex justify-between">
+                  <div className="font-medium text-slate-800">
+                    {c.code ? `${c.code} — ${c.name}` : c.name}
+                  </div>
+
+                  <div className="text-red-600 font-semibold">
+                    {c.grade_pct}%
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

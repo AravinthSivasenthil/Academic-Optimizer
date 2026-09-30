@@ -64,10 +64,18 @@ async def gpa_summary():
         sem = c.get("semester", "Unassigned")
         by_semester.setdefault(sem, []).append(entry)
 
+    def sem_sort_key(name: str):
+        term_order = {"Winter": 0, "Spring": 1, "Summer": 2, "Fall": 3}
+        parts = name.split()
+        if len(parts) == 2 and parts[1].isdigit():
+            return (int(parts[1]), term_order.get(parts[0], 99))
+        return (9999, 99)
+
     semesters = []
     cum_credits = 0.0
     cum_points = 0.0
-    for sem, courses in by_semester.items():
+    for sem in sorted(by_semester.keys(), key=sem_sort_key):
+        courses = by_semester[sem]
         credits = sum(c["credits"] for c in courses if c["gpa_points"] is not None)
         points = sum(c["credits"] * c["gpa_points"] for c in courses if c["gpa_points"] is not None)
         sem_gpa = (points / credits) if credits > 0 else None

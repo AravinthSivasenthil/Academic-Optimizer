@@ -4,6 +4,8 @@ import Courses from "./pages/Courses";
 import CourseDetail from "./pages/CourseDetail";
 import GPA from "./pages/GPA";
 import Deadlines from "./pages/Deadlines";
+import Analytics from "./pages/Analytics";
+
 
 
 function App() {
@@ -49,6 +51,14 @@ function App() {
               >
                   GPA
               </NavLink>
+              <NavLink
+                to="/analytics"
+                className={({ isActive }) =>
+                  isActive ? "text-slate-900 font-semibold" : "text-slate-500"
+                }
+              >
+                Analytics
+              </NavLink>
             </nav>
           </div>
         </header>
@@ -59,6 +69,7 @@ function App() {
             <Route path="/courses/:id" element={<CourseDetail />} />
             <Route path="/gpa" element={<GPA />} />
             <Route path="/deadlines" element={<Deadlines />} />
+            <Route path="/analytics" element={<Analytics />} />
           </Routes>
         </main>
       </div>
